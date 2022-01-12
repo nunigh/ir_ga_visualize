@@ -1,0 +1,58 @@
+<html>	
+	<body>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+		<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="ir_ga_vis.css">
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="./js-imagediff-master/imagediff.js"></script>
+		<script type="text/javascript" src="./jsonpath-0.8.0.js"></script>
+		<script type="text/javascript" src="chartsGenerators.js"></script>
+		<script type="text/javascript" src="resultsData.json"></script>
+		<script type="text/javascript" src="readResultsData.js"></script>
+		
+		
+		<script type="text/javascript">
+		if (typeof resultsData  !='undefined')
+		{
+			resultsDataObj = new resultsDataObject(resultsData);
+		}
+		else
+		{
+			console.log ("no data")
+		}
+		function onFintessFuncChoose(funcName){
+			if (typeof resultsData  =='undefined')
+			{
+				var dvTable = document.getElementById("noDataText").style.display = '';
+				console.log ("no data")
+				return
+			}
+			console.log ("onFintessFuncChoose")
+			if (funcName != 'ALL'){
+				tasks = new resultsDataObject(resultsDataObj.getTasksByFitness(funcName));
+			}
+			else{
+				tasks = resultsDataObj
+			}
+			generateSummaryChart(tasks)
+			
+			DetailedChart (tasks,resultsDataObj.getAllFilesModes(),funcName)
+			generateTable(tasks)
+		}
+		
+		</script>
+		
+				<h1> Select Fitness Method:</h1>
+				<input type="radio" name="fintnessFunc" value="ALL" onclick="onFintessFuncChoose('ALL')"> ALL <br>
+				<input type="radio" name="fintnessFunc" value="HD" onclick="onFintessFuncChoose('NEW_HD')"> HD <br>
+				<input type="radio" name="fintnessFunc" value="NCC" onclick="onFintessFuncChoose('NCC')" > NCC <br>
+				<input type="radio" name="fintnessFunc" value="HD2NCC" onclick="onFintessFuncChoose('HD_NCC')" > HD -> NCC <br> 
+				<input type="radio" name="fintnessFunc" value="NCC2HD" onclick="onFintessFuncChoose('NCC_HD')" > NCC -> HD <br>
+			</form>
+			<div id="noDataText" style="display:none"> <p> <h2> No Data </h2> </p></div>
+			
+			<div id="summarychartContainer" style="height: 300px; width: 50%;"> </div>
+			<div id="detailedChartContainer" style="height: 500px; width: 100%;" > </div>
+			<div id="rawResultsTable"> </div>
+	</body>
+</html>
